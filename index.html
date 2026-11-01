@@ -187,7 +187,27 @@ function cell(f,x,i){const v=x[f.k];switch(f.t){
  case 'area':return v?`<div style="white-space:pre-wrap;min-width:200px;max-width:340px">${esc(v)}</div>`:'–';
  case 'url':return v&&/^https?:\/\//i.test(v)?`<a href="${esc(v)}" target="_blank" rel="noopener" style="color:var(--pk);font-weight:700">Buka toko ↗</a>`:'–';
  case 'step':return `<div class="sp"><button onclick="stp(${i},'${f.k}',-1)" aria-label="Kurangi">−</button><b>${v||0}</b><button onclick="stp(${i},'${f.k}',1)" aria-label="Tambah">+</button></div>`;
- case 'ulink':{const l=glink(x);if(!l)return '<span class="note">Isi link undangan di atas</span>';let n=String(x.w||'').replace(/\D/g,'');if(n[0]==='0')n='62'+n.slice(1);const m=encodeURIComponent('Assalamualaikum '+x.a+', dengan penuh syukur kami mengundang Anda ke pernikahan Afida & Habib pada 17 Januari 2027. Undangan digital: '+l);return `<div style="display:flex;gap:4px;flex-wrap:wrap"><button class="btn ghost" style="padding:5px 9px;font-size:12px" onclick="cp(${i},this)">Salin</button><a class="btn" style="padding:6px 9px;font-size:12px;text-decoration:none;display:inline-block" href="https://wa.me/${n}?text=${m}" target="_blank" rel="noopener">Kirim WA</a></div>`}
+ case 'ulink':{const l=glink(x);if(!l)return '<span class="note">Isi link undangan di atas</span>';let n=String(x.w||'').replace(/\D/g,'');if(n[0]==='0')n='62'+n.slice(1);const m=encodeURIComponent(pesan(x,l));
+  // ===== TEKS PESAN WHATSAPP: edit di antara tanda ` ` di bawah ini =====
+// {link} = link undangan otomatis per tamu, {nama} = nama tamu.
+const PESAN=`_Assalamu’alaikum Warahmatullahi Wabarakatuh_
+
+Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara pernikahan kami.
+
+*Berikut link undangan dari kami*, untuk info lengkap dari acara bisa kunjungi :
+
+{link}
+
+Merupakan suatu kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan untuk hadir dan memberikan do’a restu.
+
+Terimakasih banyak atas perhatiannya☺️
+
+_Wassalamu’alaikum Warahmatullahi Wabarakatuh_
+
+Hormat Kami,
+*Afida & Habib*`;
+const pesan=(x,l)=>PESAN.split('{link}').join(l).split('{nama}').join(x.a);
+  ;return `<div style="display:flex;gap:4px;flex-wrap:wrap"><button class="btn ghost" style="padding:5px 9px;font-size:12px" onclick="cp(${i},this)">Salin</button><a class="btn" style="padding:6px 9px;font-size:12px;text-decoration:none;display:inline-block" href="https://wa.me/${n}?text=${m}" target="_blank" rel="noopener">Kirim WA</a></div>`}
  default:return esc(v)}}
 
 function page(k){const p=PG[k],r=rows(k),e=edit>=0?r[edit]:{};
